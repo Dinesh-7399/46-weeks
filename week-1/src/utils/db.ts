@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 export const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.DATABASE_URL as string);
+    if(!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL not defined");
+    }
+    const conn = await mongoose.connect(process.env.DATABASE_URL);
     console.log(`Database connected: ${conn.connection.host}`);
   } catch (error) {
     console.error('Database connection failed', error);

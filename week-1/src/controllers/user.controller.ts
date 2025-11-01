@@ -18,7 +18,7 @@ export const userController = {
       const { name, password, email } = registerSchema.parse(req.body);
       const user = await authService.register(name, password, email);
 
-      res.status(201).json(user);
+      return res.status(201).json(user);
     } catch (error: any) {
       console.error('Error parsing register schema:', error);
       if (error instanceof z.ZodError) {
@@ -26,7 +26,7 @@ export const userController = {
           errors: error.message
         })
       }
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }, async login(req: Request, res: Response) {
     try {
@@ -39,7 +39,7 @@ export const userController = {
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days        
       })
       // Also return token for Postman usage
-      res.status(200).json({
+      return res.status(200).json({
         message: "Login successful",
         token,
         user,
@@ -52,7 +52,7 @@ export const userController = {
           errors: error.message
         })
       }
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   },
   async logout(req : Request, res : Response) {
@@ -67,14 +67,14 @@ export const userController = {
       });
     } catch (error) {
       console.error('Error in logout controller:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   },
   async profile(req: Request, res: Response) {
     try {
       const userId = (req as any).user?.id;
       if (!userId) {
-        res.status(401).json({
+        return res.status(401).json({
           message: 'Unauthorized'
         });
       }
@@ -84,12 +84,12 @@ export const userController = {
           message: 'User not found'
         })
       }
-      res.status(200).json({
+      return res.status(200).json({
         message: 'User profile fetched', user
       })
     } catch (error) {
       console.error('Error in profile controller:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 }
