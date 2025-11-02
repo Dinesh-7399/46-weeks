@@ -4,6 +4,7 @@ import { connectDB } from './utils/db';
 import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.routes';
 import projectRouter from './routes/project.routes';
+import taskRouter from './routes/task.routes';
 dotenv.config();
 
 
@@ -18,6 +19,7 @@ connectDB();
 
 app.use('/api/user',userRouter);
 app.use('/api/project',projectRouter);
+app.use('/api', taskRouter);
 app.use('/health', ( req : Request , res : Response) => {
   res.status(200).json({
     status : 'OK'
